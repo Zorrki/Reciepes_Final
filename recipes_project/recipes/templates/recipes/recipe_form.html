@@ -1,9 +1,43 @@
 {% extends 'recipes/base.html' %}
 {% block content %}
-<h2>{% if edit %}Редактировать{% else %}Добавить{% endif %} рецепт</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">{% if edit %}Сохранить{% else %}Добавить{% endif %}</button>
-</form>
+<div class="row justify-content-center my-4">
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="mb-4">{% if edit %}Редактировать{% else %}Добавить{% endif %} рецепт</h2>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Название:</label>
+            {{ form.title }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Категория:</label>
+            {{ form.category }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Краткое описание:</label>
+            {{ form.description }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Фото:</label>
+            {{ form.image }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ингредиенты:</label>
+            {{ form.ingredients }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Инструкция:</label>
+            {{ form.steps }}
+          </div>
+          <button type="submit" class="btn btn-success">
+            {% if edit %}Сохранить{% else %}Добавить{% endif %}
+          </button>
+          <a href="{% url 'index' %}" class="btn btn-outline-secondary">Отмена</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

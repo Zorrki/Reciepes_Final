@@ -1,15 +1,39 @@
 {% extends 'recipes/base.html' %}
+{% block title %}{{ recipe.title }} — Рецепт{% endblock %}
+
 {% block content %}
-<h2>{{ recipe.title }}</h2>
-<p>Автор: {{ recipe.author.username }}</p>
-<p>Время: {{ recipe.cook_time }} мин.</p>
-{% if recipe.image %}
-  <img src="{{ recipe.image.url }}" width="300">
-{% endif %}
-<p>{{ recipe.description }}</p>
-<p><strong>Ингредиенты:</strong><br>{{ recipe.ingredients|linebreaks }}</p>
-<p><strong>Шаги:</strong><br>{{ recipe.steps|linebreaks }}</p>
-{% if user == recipe.author %}
-    <a href="{% url 'recipe_edit' pk=recipe.pk %}">Редактировать</a>
-{% endif %}
+<div class="row justify-content-center mt-4">
+  <div class="col-md-8 col-lg-7">
+    <div class="card shadow-lg">
+      {% if recipe.image %}
+        <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}" style="object-fit:cover; max-height:320px;">
+      {% endif %}
+      <div class="card-body">
+        <h2 class="card-title mb-3">{{ recipe.title }}</h2>
+        <div class="mb-2">
+            <span class="badge bg-secondary">{{ recipe.category.name }}</span>
+        </div>
+        <p class="text-muted mb-2">Автор: {{ recipe.author.username }}</p>
+        <p class="mb-4">{{ recipe.description }}</p>
+
+        <h5 class="mb-2">Ингредиенты:</h5>
+        <ul class="list-group list-group-flush mb-4">
+          {% for line in recipe.ingredients.splitlines %}
+            <li class="list-group-item">{{ line }}</li>
+          {% endfor %}
+        </ul>
+
+        <h5 class="mb-2">Инструкция:</h5>
+        <div class="mb-4" style="white-space: pre-line;">
+          {{ recipe.instructions|linebreaksbr }}
+        </div>
+
+        <a href="{% url 'index' %}" class="btn btn-outline-primary me-2">← Назад к списку</a>
+        {% if user == recipe.author %}
+          <a href="{% url 'recipe_edit' pk=recipe.pk %}" class="btn btn-success">Редактировать</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
