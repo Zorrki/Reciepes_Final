@@ -1,9 +1,27 @@
 {% extends 'recipes/base.html' %}
 {% block content %}
-<h2>Вход</h2>
-<form method="post">
+  <h2 class="mb-4">Вход на сайт</h2>
+  <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Войти</button>
-</form>
+
+    {{ form.non_field_errors }}
+
+    <div class="mb-3">
+      <label for="id_username" class="form-label">Имя пользователя</label><br>
+      {{ form.username }}
+      {% for error in form.username.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_password" class="form-label">Пароль</label><br>
+      {{ form.password }}
+      {% for error in form.password.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Войти</button>
+  </form>
 {% endblock %}

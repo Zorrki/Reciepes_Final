@@ -4,34 +4,58 @@
 {% block content %}
 <div class="row justify-content-center mt-4">
   <div class="col-md-8 col-lg-7">
-    <div class="card shadow-lg">
+    <div class="card shadow-lg overflow-hidden">
       {% if recipe.image %}
-        <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}" style="object-fit:cover; max-height:320px;">
+        <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}"
+             style="object-fit:cover; max-height:320px; border-bottom:1px solid #e9ecef;">
       {% endif %}
       <div class="card-body">
-        <h2 class="card-title mb-3">{{ recipe.title }}</h2>
-        <div class="mb-2">
-            <span class="badge bg-secondary">{{ recipe.category.name }}</span>
+        <h2 class="card-title fw-bold text-primary mb-2">{{ recipe.title }}</h2>
+        <div class="mb-3">
+          {% for c in recipe.categories.all %}
+            <span class="badge bg-secondary me-1">{{ c.name }}</span>
+          {% empty %}
+            <span class="text-muted">Без категории</span>
+          {% endfor %}
         </div>
-        <p class="text-muted mb-2">Автор: {{ recipe.author.username }}</p>
-        <p class="mb-4">{{ recipe.description }}</p>
-
-        <h5 class="mb-2">Ингредиенты:</h5>
+        <p class="mb-2">
+          <i class="bi bi-person-circle me-1 text-secondary"></i>
+          <span class="text-muted">Автор: {{ recipe.author.username }}</span>
+        </p>
+        {% if recipe.description %}
+          <p class="mb-4 text-body">{{ recipe.description }}</p>
+        {% endif %}
+        <div class="mb-2">
+          <i class="bi bi-clock-history text-secondary me-1"></i>
+          <span class="fw-semibold">Время приготовления:</span>
+          <span>{{ recipe.cook_time }} мин.</span>
+        </div>
+        <h5 class="mt-4 mb-2 text-success">Ингредиенты:</h5>
         <ul class="list-group list-group-flush mb-4">
           {% for line in recipe.ingredients.splitlines %}
+            {% if line %}
             <li class="list-group-item">{{ line }}</li>
+            {% endif %}
           {% endfor %}
         </ul>
-
-        <h5 class="mb-2">Инструкция:</h5>
-        <div class="mb-4" style="white-space: pre-line;">
-          {{ recipe.instructions|linebreaksbr }}
+        <h5 class="mb-2 text-success">Инструкция:</h5>
+        <ol class="mb-4">
+            {% for step in recipe.steps.splitlines %}
+            {% if step.strip %}
+              <li>{{ step }}</li>
+            {% endif %}
+            {% endfor %}
+        </ol>
+        <div class="mt-4">
+          <a href="{% url 'index' %}" class="btn btn-outline-primary me-2">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+          </a>
+          {% if user == recipe.author %}
+            <a href="{% url 'recipe_edit' pk=recipe.pk %}" class="btn btn-success">
+              <i class="bi bi-pencil"></i> Редактировать
+            </a>
+          {% endif %}
         </div>
-
-        <a href="{% url 'index' %}" class="btn btn-outline-primary me-2">← Назад к списку</a>
-        {% if user == recipe.author %}
-          <a href="{% url 'recipe_edit' pk=recipe.pk %}" class="btn btn-success">Редактировать</a>
-        {% endif %}
       </div>
     </div>
   </div>

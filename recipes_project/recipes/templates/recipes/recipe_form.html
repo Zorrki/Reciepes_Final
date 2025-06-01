@@ -7,30 +7,64 @@
         <h2 class="mb-4">{% if edit %}Редактировать{% else %}Добавить{% endif %} рецепт</h2>
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
+          {{ form.non_field_errors }}
+
           <div class="mb-3">
-            <label class="form-label">Название:</label>
+            <label for="{{ form.title.id_for_label }}" class="form-label">Название</label><br>
             {{ form.title }}
+            {% for error in form.title.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
           </div>
+
           <div class="mb-3">
-            <label class="form-label">Категория:</label>
-            {{ form.category }}
+            <label class="form-label">Категории</label><br>
+            {{ form.categories }}
+            {% for error in form.categories.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
           </div>
+
           <div class="mb-3">
-            <label class="form-label">Краткое описание:</label>
+            <label for="{{ form.description.id_for_label }}" class="form-label">Краткое описание</label><br>
             {{ form.description }}
+            {% for error in form.description.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
           </div>
+
           <div class="mb-3">
-            <label class="form-label">Фото:</label>
+            <label for="{{ form.cook_time.id_for_label }}" class="form-label">Время приготовления (мин.)</label><br>
+            {{ form.cook_time }}
+            {% for error in form.cook_time.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.image.id_for_label }}" class="form-label">Фото</label><br>
             {{ form.image }}
+            {% for error in form.image.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
           </div>
+
           <div class="mb-3">
-            <label class="form-label">Ингредиенты:</label>
+            <label for="{{ form.ingredients.id_for_label }}" class="form-label">Ингредиенты</label><br>
             {{ form.ingredients }}
+            {% for error in form.ingredients.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
           </div>
+
           <div class="mb-3">
-            <label class="form-label">Инструкция:</label>
+            <label for="{{ form.steps.id_for_label }}" class="form-label">Инструкция</label><br>
             {{ form.steps }}
+            {% for error in form.steps.errors %}
+              <div class="text-danger">{{ error }}</div>
+            {% endfor %}
           </div>
+
           <button type="submit" class="btn btn-success">
             {% if edit %}Сохранить{% else %}Добавить{% endif %}
           </button>
